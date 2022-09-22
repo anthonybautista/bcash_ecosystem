@@ -611,4 +611,8 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
         _token.transfer(msg.sender, _token.balanceOf(address(this)));
     }
 
+    receive() external payable {
+
+	}
+
 }
