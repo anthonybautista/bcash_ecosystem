@@ -27,8 +27,8 @@ contract MockJLP is ERC20 {
     }
 
     function updateReserves(uint112 _newWAVAX, uint112 _newAntG) public {
-        reserve0 = _newWAVAX * 10**18;
-        reserve1 = _newAntG * 10**18;
+        reserve0 = _newAntG * 10**18;
+        reserve1 = _newWAVAX * 10**18;
     }
 
 }

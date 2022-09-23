@@ -53,7 +53,7 @@ contract bCashLPFarm is ReentrancyGuard, Ownable {
 
         uint _lpSupply = lp.totalSupply();
 
-        (uint _reserveWavax,,) = lp.getReserves();
+        (,uint _reserveWavax,) = lp.getReserves();
 
         uint _lpStaked = LPStaked[account];
 
@@ -67,7 +67,7 @@ contract bCashLPFarm is ReentrancyGuard, Ownable {
 
         uint _lpSupply = lp.totalSupply();
 
-        (,uint _reserveBCash,) = lp.getReserves();
+        (uint _reserveBCash,,) = lp.getReserves();
 
         uint _lpStaked = LPStaked[account];
 
