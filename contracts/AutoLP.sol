@@ -553,8 +553,7 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
     }
 
     function claim() public nonReentrant {
-        require(addressToLocker[msg.sender].lpLocked > 0 &&
-                timeUntilUnlockedFor(msg.sender) == 0, "Nothing to claim!");
+        require(amountClaimableFor(msg.sender) > 0, "Nothing to claim!");
 
         TimeLock storage _locker = addressToLocker[msg.sender];
 
@@ -594,7 +593,8 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
     function amountClaimableFor(address _holder) public view returns(uint256) {
         TimeLock memory _locker = addressToLocker[_holder];
 
-        if (_locker.timestamp + lockTime < block.timestamp) {
+        if (_locker.timestamp + lockTime > block.timestamp ||
+            _locker.lpLocked == 0) {
             return 0;
         } else {
             return _locker.lpLocked;
