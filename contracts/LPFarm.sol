@@ -62,6 +62,24 @@ contract bCashLPFarm is ReentrancyGuard, Ownable {
         return _wavax;
     }
 
+    function bCashView(address account) public view returns(uint) {
+        ILP lp = ILP(LP_CONTRACT);
+
+        uint _lpSupply = lp.totalSupply();
+
+        (,uint _reserveBCash,) = lp.getReserves();
+
+        uint _lpStaked = LPStaked[account];
+
+        uint _bCash = _lpStaked * _reserveBCash / _lpSupply;
+
+        return _bCash;
+    }
+
+    function totalView(address account) public view returns(uint, uint, uint) {
+        return (wavaxView(account), bCashView(account), claimableView(account));
+    }
+
 
     function claimableView(address account) public view returns(uint) {
 
