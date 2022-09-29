@@ -262,163 +262,137 @@ abstract contract ReentrancyGuard {
 
 pragma solidity ^0.8.0;
 
-interface IJoeRouter01 {
+interface IPangolinRouter {
     function factory() external pure returns (address);
-
     function WAVAX() external pure returns (address);
 
     function addLiquidity(
         address tokenA,
         address tokenB,
-        uint256 amountADesired,
-        uint256 amountBDesired,
-        uint256 amountAMin,
-        uint256 amountBMin,
+        uint amountADesired,
+        uint amountBDesired,
+        uint amountAMin,
+        uint amountBMin,
         address to,
-        uint256 deadline
-    )
-        external
-        returns (
-            uint256 amountA,
-            uint256 amountB,
-            uint256 liquidity
-        );
-
+        uint deadline
+    ) external returns (uint amountA, uint amountB, uint liquidity);
     function addLiquidityAVAX(
         address token,
-        uint256 amountTokenDesired,
-        uint256 amountTokenMin,
-        uint256 amountAVAXMin,
+        uint amountTokenDesired,
+        uint amountTokenMin,
+        uint amountAVAXMin,
         address to,
-        uint256 deadline
-    )
-        external
-        payable
-        returns (
-            uint256 amountToken,
-            uint256 amountAVAX,
-            uint256 liquidity
-        );
-
+        uint deadline
+    ) external payable returns (uint amountToken, uint amountAVAX, uint liquidity);
     function removeLiquidity(
         address tokenA,
         address tokenB,
-        uint256 liquidity,
-        uint256 amountAMin,
-        uint256 amountBMin,
+        uint liquidity,
+        uint amountAMin,
+        uint amountBMin,
         address to,
-        uint256 deadline
-    ) external returns (uint256 amountA, uint256 amountB);
-
+        uint deadline
+    ) external returns (uint amountA, uint amountB);
     function removeLiquidityAVAX(
         address token,
-        uint256 liquidity,
-        uint256 amountTokenMin,
-        uint256 amountAVAXMin,
+        uint liquidity,
+        uint amountTokenMin,
+        uint amountAVAXMin,
         address to,
-        uint256 deadline
-    ) external returns (uint256 amountToken, uint256 amountAVAX);
-
+        uint deadline
+    ) external returns (uint amountToken, uint amountAVAX);
     function removeLiquidityWithPermit(
         address tokenA,
         address tokenB,
-        uint256 liquidity,
-        uint256 amountAMin,
-        uint256 amountBMin,
+        uint liquidity,
+        uint amountAMin,
+        uint amountBMin,
         address to,
-        uint256 deadline,
-        bool approveMax,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external returns (uint256 amountA, uint256 amountB);
-
+        uint deadline,
+        bool approveMax, uint8 v, bytes32 r, bytes32 s
+    ) external returns (uint amountA, uint amountB);
     function removeLiquidityAVAXWithPermit(
         address token,
-        uint256 liquidity,
-        uint256 amountTokenMin,
-        uint256 amountAVAXMin,
+        uint liquidity,
+        uint amountTokenMin,
+        uint amountAVAXMin,
         address to,
-        uint256 deadline,
-        bool approveMax,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) external returns (uint256 amountToken, uint256 amountAVAX);
-
+        uint deadline,
+        bool approveMax, uint8 v, bytes32 r, bytes32 s
+    ) external returns (uint amountToken, uint amountAVAX);
     function swapExactTokensForTokens(
-        uint256 amountIn,
-        uint256 amountOutMin,
+        uint amountIn,
+        uint amountOutMin,
         address[] calldata path,
         address to,
-        uint256 deadline
-    ) external returns (uint256[] memory amounts);
-
+        uint deadline
+    ) external returns (uint[] memory amounts);
     function swapTokensForExactTokens(
-        uint256 amountOut,
-        uint256 amountInMax,
+        uint amountOut,
+        uint amountInMax,
         address[] calldata path,
         address to,
-        uint256 deadline
-    ) external returns (uint256[] memory amounts);
-
-    function swapExactAVAXForTokens(
-        uint256 amountOutMin,
-        address[] calldata path,
-        address to,
-        uint256 deadline
-    ) external payable returns (uint256[] memory amounts);
-
-    function swapTokensForExactAVAX(
-        uint256 amountOut,
-        uint256 amountInMax,
-        address[] calldata path,
-        address to,
-        uint256 deadline
-    ) external returns (uint256[] memory amounts);
-
-    function swapExactTokensForAVAX(
-        uint256 amountIn,
-        uint256 amountOutMin,
-        address[] calldata path,
-        address to,
-        uint256 deadline
-    ) external returns (uint256[] memory amounts);
-
-    function swapAVAXForExactTokens(
-        uint256 amountOut,
-        address[] calldata path,
-        address to,
-        uint256 deadline
-    ) external payable returns (uint256[] memory amounts);
-
-    function quote(
-        uint256 amountA,
-        uint256 reserveA,
-        uint256 reserveB
-    ) external pure returns (uint256 amountB);
-
-    function getAmountOut(
-        uint256 amountIn,
-        uint256 reserveIn,
-        uint256 reserveOut
-    ) external pure returns (uint256 amountOut);
-
-    function getAmountIn(
-        uint256 amountOut,
-        uint256 reserveIn,
-        uint256 reserveOut
-    ) external pure returns (uint256 amountIn);
-
-    function getAmountsOut(uint256 amountIn, address[] calldata path)
+        uint deadline
+    ) external returns (uint[] memory amounts);
+    function swapExactAVAXForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline)
         external
-        view
-        returns (uint256[] memory amounts);
-
-    function getAmountsIn(uint256 amountOut, address[] calldata path)
+        payable
+        returns (uint[] memory amounts);
+    function swapTokensForExactAVAX(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
         external
-        view
-        returns (uint256[] memory amounts);
+        returns (uint[] memory amounts);
+    function swapExactTokensForAVAX(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
+        external
+        returns (uint[] memory amounts);
+    function swapAVAXForExactTokens(uint amountOut, address[] calldata path, address to, uint deadline)
+        external
+        payable
+        returns (uint[] memory amounts);
+
+    function quote(uint amountA, uint reserveA, uint reserveB) external pure returns (uint amountB);
+    function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut) external pure returns (uint amountOut);
+    function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut) external pure returns (uint amountIn);
+    function getAmountsOut(uint amountIn, address[] calldata path) external view returns (uint[] memory amounts);
+    function getAmountsIn(uint amountOut, address[] calldata path) external view returns (uint[] memory amounts);
+
+    function removeLiquidityAVAXSupportingFeeOnTransferTokens(
+        address token,
+        uint liquidity,
+        uint amountTokenMin,
+        uint amountAVAXMin,
+        address to,
+        uint deadline
+    ) external returns (uint amountAVAX);
+    function removeLiquidityAVAXWithPermitSupportingFeeOnTransferTokens(
+        address token,
+        uint liquidity,
+        uint amountTokenMin,
+        uint amountAVAXMin,
+        address to,
+        uint deadline,
+        bool approveMax, uint8 v, bytes32 r, bytes32 s
+    ) external returns (uint amountAVAX);
+
+    function swapExactTokensForTokensSupportingFeeOnTransferTokens(
+        uint amountIn,
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external;
+    function swapExactAVAXForTokensSupportingFeeOnTransferTokens(
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external payable;
+    function swapExactTokensForAVAXSupportingFeeOnTransferTokens(
+        uint amountIn,
+        uint amountOutMin,
+        address[] calldata path,
+        address to,
+        uint deadline
+    ) external;
 }
 
 interface ILP {
@@ -444,13 +418,13 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
     address[] _lockedAccounts;
     address[] _mintAddressArray;
 
-    uint256 private _totalAvaxDeposited;
     uint256 private _totalLPLocked;
     uint256 public lockTime = 300;
     uint256[] private _mintAmountArray;
 
+    bool public paused = false;
+
     struct TimeLock {
-        uint256 avaxDeposited;
         uint256 lpLocked;
         uint256 timestamp;
     }
@@ -460,22 +434,23 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
 
     IBCash _bc;
     ILP _lp; 
-    IJoeRouter01 _router;
+    IPangolinRouter _router;
 
-    constructor(address bcashAddress, address lp) {
-        _bc = IBCash(bcashAddress);
-        _lp = ILP(lp);
-        _router = IJoeRouter01(0x60aE616a2155Ee3d9A68541Ba4544862310933d4);
+    constructor() {
+        _bc = IBCash(0x4BA16DaF8ed418deD920C66e45cc3eaFFDE53Ac7);
+        _lp = ILP(0x07280f32830e3A1Ca7B535b603B09890e692EaF6);
+        _router = IPangolinRouter(0xE54Ca86531e17Ef3616d22Ca28b0D458b6C89106);
         _mintAddressArray.push(address(this));
     }
 
     function deposit() public payable nonReentrant {
+        require(!paused, "Contract is paused!");
+        require(addressToLocker[msg.sender].lpLocked == 0, "You are already locked!");
         // only allow over X amount to be locked
-        require(msg.value >= 0.01 ether, "Must deposit at least 1 AVAX.");
+        require(msg.value >= 1 ether && 
+                msg.value <= 100 ether, "Must deposit 1-100 AVAX.");
 
         TimeLock memory _locker;
-
-        _locker.avaxDeposited = msg.value;
 
         // get LP reserves and find the required bCASH amount to add liquidity
         (uint256 _bcReserves, uint256 _wavaxReserves,) = _lp.getReserves();
@@ -492,24 +467,22 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
         // approve token transfer to cover all possible scenarios
         _bc.approve(address(_router), _bcNeeded);
 
-        // add liquidity
         // add the liquidity
-        (, 
-         uint256 amountAVAX,) = _router.addLiquidityAVAX{value: msg.value}(
+        _router.addLiquidityAVAX{value: msg.value}(
                                 address(_bc),
                                 _bcNeeded,
-                                0, // slippage is unavoidable
-                                0, // slippage is unavoidable
+                                (_bcNeeded * 8500 / 10000), // max 15% slippage
+                                (msg.value * 8500 / 10000), // max 15% slippage
                                 address(this),
                                 block.timestamp + 1800 // need to give time buffer
-                              );
-
-        if (amountAVAX > msg.value) {
-            payable(msg.sender).call{ value: msg.value - amountAVAX }("");
-        }                      
+                              );                 
 
         // get after balance of LP tokens
         uint256 _afterLP = _lp.balanceOf(address(this));
+
+        if (address(this).balance > 0) {
+            payable(msg.sender).call{ value: address(this).balance }("");
+        }     
 
         // get new LP added
         uint256 _lpAdded = _afterLP - _beforeLP;
@@ -521,7 +494,6 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
         addressToLocker[msg.sender] = _locker;
         _lockedAccounts.push(msg.sender);
 
-        _totalAvaxDeposited += msg.value;
         _totalLPLocked += _lpAdded;
 
         emit LPLocked(msg.sender, _lpAdded, msg.value);
@@ -529,10 +501,6 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
 
     function amountLockedFor(address _holder) public view returns (uint256) {
         return addressToLocker[_holder].lpLocked;
-    }
-
-    function totalAvaxDeposited() public view returns (uint256) {
-        return _totalAvaxDeposited;
     }
 
     function totalLPLocked() public view returns (uint256) {
@@ -560,7 +528,6 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
         uint256 _claimable = _locker.lpLocked;
 
         _locker.lpLocked = 0;
-        _locker.avaxDeposited = 0;
         _locker.timestamp = 0;
 
         // transfer claimable
@@ -599,6 +566,34 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
         } else {
             return _locker.lpLocked;
         }
+    }
+
+    function wavaxView() public view returns(uint) {
+        uint _lpSupply = _lp.totalSupply();
+
+        (,uint _reserveWavax,) = _lp.getReserves();
+
+        uint _wavax = _totalLPLocked * _reserveWavax / _lpSupply;
+
+        return _wavax;
+    }
+
+    function bCashView() public view returns(uint) {
+        uint _lpSupply = _lp.totalSupply();
+
+        (uint _reserveBCash,,) = _lp.getReserves();
+
+        uint _bCash = _totalLPLocked * _reserveBCash / _lpSupply;
+
+        return _bCash;
+    }
+
+    function totalView() public view returns(uint, uint, uint) {
+        return (wavaxView(), bCashView(), totalLPLocked());
+    }
+
+    function flipPaused() public onlyOwner {
+        paused = !paused;
     }
 
     function emergencyWithdraw() public onlyOwner {
