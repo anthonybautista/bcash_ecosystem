@@ -126,7 +126,7 @@ describe("Staking Tests", function () {
 
   });
 
-  it("Should stake bCASH for sbCASH", async function () {
+  it("Should stake bCASH for sbCASH and allow claiming after cooldown", async function () {
     // approve use of JLP token
     await BCash.connect(addr1).approve(sbCASH.address, powTen18("10000"));
     await BCash.connect(addr2).approve(sbCASH.address, powTen18("70000"));
