@@ -221,4 +221,110 @@ describe("Staking Tests", function () {
     );
   });
 
+  it("Should allow compounding after cooldown", async function () {
+    // approve use of JLP token
+    await BCash.connect(addr1).approve(sbCASH.address, powTen18("10000"));
+    await BCash.connect(addr2).approve(sbCASH.address, powTen18("70000"));
+    await BCash.connect(addr3).approve(sbCASH.address, powTen18("20000"));
+
+    await sbCASH.connect(addr1).stake(powTen18("10000"));
+    let [_sbCASH, _bCASH] = await sbCASH.totalView();
+    expect(_sbCASH.toString()).to.equal(
+      powTen18("10000")
+    );
+    expect(_bCASH.toString()).to.equal(
+      powTen18("10000")
+    );
+
+    await sbCASH.connect(addr2).stake(powTen18("60000"));
+    let [_sbCASH2, _bCASH2] = await sbCASH.totalView();
+    expect(_sbCASH2.toString()).to.equal(
+      powTen18("70000")
+    );
+    expect(_bCASH2.toString()).to.equal(
+      powTen18("70000")
+    );
+
+    expect(await sbCASH.getShareFor(addr1.address)).to.equal(
+      powTen18("10000")
+    );
+
+    expect(await sbCASH.getShareFor(addr2.address)).to.equal(
+      powTen18("60000")
+    );
+
+    await BCash.connect(addr3).transfer(sbCASH.address,powTen18("20000"));
+
+    let [_sbCASH3, _bCASH3] = await sbCASH.totalView();
+    expect(_sbCASH3.toString()).to.equal(
+      powTen18("70000")
+    );
+    expect(_bCASH3.toString()).to.equal(
+      powTen18("90000")
+    );
+
+    await wait(7, 1); // 7 days
+    await sbCASH.connect(addr2).stake(powTen18("10000"));
+    let [_sbCASH4, _bCASH4] = await sbCASH.totalView();
+    expect(_sbCASH4.toString()).to.equal(
+      powTen18("80000")
+    );
+    expect(_bCASH4.toString()).to.equal(
+      powTen18("100000")
+    );
+
+    expect(await sbCASH.getShareFor(addr1.address)).to.equal(
+      powTen18("12500")
+    );
+
+    expect(await sbCASH.getShareFor(addr2.address)).to.equal(
+      powTen18("87500")
+    );
+
+    await sbCASH.connect(addr1).compound();
+
+    let [_sbCASH5, _bCASH5] = await sbCASH.totalView();
+    expect(_sbCASH5.toString()).to.equal(
+      powTen18("82500")
+    );
+    expect(_bCASH5.toString()).to.equal(
+      powTen18("100000")
+    );
+
+    expect(await sbCASH.getShareFor(addr1.address)).to.equal(
+      "15151515151515151515151"
+    );
+
+    expect(await sbCASH.getShareFor(addr2.address)).to.equal(
+      "84848484848484848484848"
+    );
+
+    await wait(3, 1); // day 10
+
+    await expect(
+      sbCASH.connect(addr1).unStake()
+    ).to.be.revertedWith("Stake not done yet!");
+
+    await wait(4, 1); // day 14
+
+    await sbCASH.connect(addr1).unStake();
+    await sbCASH.connect(addr2).unStake();
+
+    let [_sbCASH6, _bCASH6] = await sbCASH.totalView();
+    expect(_sbCASH6.toString()).to.equal(
+      powTen18("0")
+    );
+    expect(_bCASH6.toString()).to.equal(
+      powTen18("0")
+    );
+
+    expect(await sbCASH.getShareFor(addr1.address)).to.equal(
+      powTen18("0")
+    );
+
+    expect(await sbCASH.getShareFor(addr2.address)).to.equal(
+      powTen18("0")
+    );
+  });
+
 });

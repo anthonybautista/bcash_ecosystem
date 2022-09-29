@@ -729,6 +729,26 @@ contract StakedButterflyCash is ERC20, Ownable, ReentrancyGuard {
         emit RemoveStake(msg.sender, _balance, _share);
     }
 
+    function compound() public nonReentrant {
+        require(addressToTimestamp[msg.sender] + cooldown <= block.timestamp, "Stake not done yet!");
+        uint256 _share = getShareFor(msg.sender);
+        require(_share > 0, "Nothing to unStake!");
+        uint256 _balance = balanceOf(msg.sender);
+        uint256 _amount = 0;
+
+        // share should never be less than balance, but prevent negative result anyways
+        if (_share > _balance) {
+            _amount = _share - _balance;
+        }
+        
+        require(_amount > 0, "Nothing to compound");
+
+        addressToTimestamp[msg.sender] = block.timestamp;
+        mint(msg.sender, _amount);
+
+        emit AddStake(msg.sender, _amount);
+    }
+
     function setBC(address bc) public onlyOwner {
         _bc = IERC20(bc);
     }
