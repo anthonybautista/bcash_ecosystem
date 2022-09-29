@@ -27,8 +27,6 @@ abstract contract Context {
 }
 
 // File: @openzeppelin/contracts/access/Ownable.sol
-
-
 // OpenZeppelin Contracts (last updated v4.7.0) (access/Ownable.sol)
 
 pragma solidity ^0.8.0;
@@ -112,8 +110,6 @@ abstract contract Ownable is Context {
 }
 
 // File: @openzeppelin/contracts/security/ReentrancyGuard.sol
-
-
 // OpenZeppelin Contracts v4.4.1 (security/ReentrancyGuard.sol)
 
 pragma solidity ^0.8.0;
@@ -178,8 +174,6 @@ abstract contract ReentrancyGuard {
 }
 
 // File: @openzeppelin/contracts/token/ERC20/IERC20.sol
-
-
 // OpenZeppelin Contracts (last updated v4.6.0) (token/ERC20/IERC20.sol)
 
 pragma solidity ^0.8.0;
@@ -263,8 +257,6 @@ interface IERC20 {
 }
 
 // File: @openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol
-
-
 // OpenZeppelin Contracts v4.4.1 (token/ERC20/extensions/IERC20Metadata.sol)
 
 pragma solidity ^0.8.0;
@@ -293,8 +285,6 @@ interface IERC20Metadata is IERC20 {
 }
 
 // File: @openzeppelin/contracts/token/ERC20/ERC20.sol
-
-
 // OpenZeppelin Contracts (last updated v4.7.0) (token/ERC20/ERC20.sol)
 
 pragma solidity ^0.8.0;
@@ -678,8 +668,6 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
 }
 
 // File: contracts/ButterflyCash.sol
-
-
 // Staked Butterfly Cash by xrpant
 
 pragma solidity ^0.8.7;
@@ -698,7 +686,7 @@ contract StakedButterflyCash is ERC20, Ownable, ReentrancyGuard {
     event AddStake(address indexed staker, uint256 amount);
     event RemoveStake(address indexed staker, uint256 amountStaked, uint256 amountReceived);
 
-    constructor() ERC20("Butterfly Cash", "bCASH") {
+    constructor() ERC20("Staked Butterfly Cash", "sbCASH") {
         _bc = IERC20(0x4BA16DaF8ed418deD920C66e45cc3eaFFDE53Ac7);
     }
 
@@ -743,6 +731,11 @@ contract StakedButterflyCash is ERC20, Ownable, ReentrancyGuard {
 
     function setBC(address bc) public onlyOwner {
         _bc = IERC20(bc);
+    }
+
+    function emergencyWithdrawERC20(address _contract) public onlyOwner {
+        IERC20 _token = IERC20(_contract);
+        _token.transfer(msg.sender, _token.balanceOf(address(this)));
     }
 
     function changeCooldown(uint256 _newAmount) public onlyOwner {
