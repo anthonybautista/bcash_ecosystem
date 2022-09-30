@@ -419,7 +419,9 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
     address[] _mintAddressArray;
 
     uint256 private _totalLPLocked;
-    uint256 public lockTime = 300;
+    uint256 public lockTime = 4 weeks;
+    uint256 public minLock = 1 ether;
+    uint256 public maxLock = 100 ether;
     uint256[] private _mintAmountArray;
 
     bool public paused = false;
@@ -447,8 +449,8 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
         require(!paused, "Contract is paused!");
         require(addressToLocker[msg.sender].lpLocked == 0, "You are already locked!");
         // only allow over X amount to be locked
-        require(msg.value >= 1 ether && 
-                msg.value <= 100 ether, "Must deposit 1-100 AVAX.");
+        require(msg.value >= minLock && 
+                msg.value <= maxLock, "Invalid deposit amount.");
 
         TimeLock memory _locker;
 
@@ -521,11 +523,10 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
     }
 
     function claim() public nonReentrant {
-        require(amountClaimableFor(msg.sender) > 0, "Nothing to claim!");
+        uint256 _claimable = amountClaimableFor(msg.sender);
+        require(_claimable > 0, "Nothing to claim!");
 
         TimeLock storage _locker = addressToLocker[msg.sender];
-
-        uint256 _claimable = _locker.lpLocked;
 
         _locker.lpLocked = 0;
         _locker.timestamp = 0;
@@ -594,6 +595,31 @@ contract BCashAutoLP is ReentrancyGuard, Ownable {
 
     function flipPaused() public onlyOwner {
         paused = !paused;
+    }
+
+    function setLockTime(uint256 _newAmount) public onlyOwner {
+        lockTime = _newAmount;
+    }
+
+    function setMinLock(uint256 _newAmount) public onlyOwner {
+        minLock = _newAmount;
+    }
+
+    function setMaxLock(uint256 _newAmount) public onlyOwner {
+        maxLock = _newAmount;
+    }
+
+    function reduceTotalLPLocked(uint256 _amount) public onlyOwner {
+        // claimable should never be gt amount locked, but just in case, prevent less than 0 errors
+        if (_totalLPLocked > _amount) {
+            _totalLPLocked -= _amount;
+        } else {
+            _totalLPLocked = 0;
+        }
+    }
+
+    function manualRemoveAccount(address _account) public onlyOwner {
+        remove(_account);
     }
 
     function emergencyWithdraw() public onlyOwner {
