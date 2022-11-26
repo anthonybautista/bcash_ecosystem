@@ -9,8 +9,8 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 contract MockJLP is ERC20 {
     
     //hard-code amounts to simplify testing
-    uint112 public reserve0 = 1000*10**18; //wavax
-    uint112 public reserve1 = 1000000*10**18; //antG
+    uint112 public reserve1 = 1000*10**18; //wavax
+    uint112 public reserve0 = 1000000*10**18; //bCASH
 
 
     constructor() ERC20("Mock JLP", "JLP"){
@@ -29,6 +29,11 @@ contract MockJLP is ERC20 {
     function updateReserves(uint112 _newWAVAX, uint112 _newAntG) public {
         reserve0 = _newAntG * 10**18;
         reserve1 = _newWAVAX * 10**18;
+    }
+
+    // helper method to get block.timestamp on local hardhat
+    function time() public view returns(uint256) {
+        return block.timestamp;
     }
 
 }

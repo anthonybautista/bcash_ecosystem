@@ -436,7 +436,7 @@ contract bCashLPFarm is ReentrancyGuard, Ownable {
     // LP needed to calculate WAVAX
     address public LP_CONTRACT;
     // bCASH needed to mint rewards
-    address public BCASH_CONTRACT = 0x4BA16DaF8ed418deD920C66e45cc3eaFFDE53Ac7;
+    address public BCASH_CONTRACT;
 
     uint public LP_STAKE_DAY_RATIO = 300;
     uint public totalLPStaking;
@@ -455,8 +455,9 @@ contract bCashLPFarm is ReentrancyGuard, Ownable {
     // same as Enumerable from openzeppelin
 
     /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor(address _lp) {
+    constructor(address _lp, address _bc) {
         LP_CONTRACT = _lp;
+        BCASH_CONTRACT = _bc;
     }
 
     event UnstakedLP(address staker, uint lp);
