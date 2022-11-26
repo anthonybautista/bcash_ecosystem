@@ -1,5 +1,7 @@
 This repo contains most of the bCASH ecosystem contracts and automated test files used in testing. These contracts have not been audited, and should be used for educational purposes only. 
 
+Deployed contract addresses can be found at docs.butterflycash.lol
+
 ```yarn test``` to launch test, you can also only trigger test for a particular file if you want (you should)
 
 ```yarn``` to install all dependencies
