@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// sprAId by xrpant for Smolrun
+// Papilio Palatia by xrpant
 
 // File: @openzeppelin/contracts/security/ReentrancyGuard.sol
 // OpenZeppelin Contracts v4.4.1 (security/ReentrancyGuard.sol)
