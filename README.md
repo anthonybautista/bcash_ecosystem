@@ -2,6 +2,8 @@ This repo contains most of the bCASH ecosystem contracts and automated test file
 
 Deployed contract addresses can be found <a href="docs.butterflycash.lol">here</a>
 
+Special thanks to @bbeldame from Avalant who gave me the testing template when we worked together on the Avalant LP farm. This LP farm was the basis for the bCASH LP farm, and all tests in this repo use the same testing template.
+
 ```yarn test``` to launch test, you can also only trigger test for a particular file if you want (you should)
 
 ```yarn``` to install all dependencies
